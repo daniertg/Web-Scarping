@@ -1,23 +1,39 @@
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
 from selenium import webdriver
-link = "https://id.wikipedia.org/wiki/Halaman_Utama"
-html = urlopen(link).read()
-soup = BeautifulSoup(html, 'html.parser')
-driver = webdriver.Chrome()
-driver.get("https://www.example.com/login")
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-username = driver.find_element_by_id("username")
-password = driver.find_element_by_id("password")
+# Setup Selenium webdriver
+service = Service('C:/windows/system32/chromedriver.exe') # Sesuaikan dengan path ke driver Chrome di komputer Anda
+driver = webdriver.Chrome(service=service)
+driver.get("http://localhost/UAS%20WEB/index.php")
 
-username.send_keys("your_username")
-password.send_keys("your_password")
+# Find and fill in login form
+wait = WebDriverWait(driver, 10)
 
-login_button = driver.find_element_by_id("login-button")
+username = wait.until(EC.presence_of_element_located((By.NAME, "username")))
+password = wait.until(EC.presence_of_element_located((By.NAME, "password")))
+
+username.send_keys("dani")
+password.send_keys("aku")
+
+# Submit login form
+login_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btn")))
 login_button.click()
 
-data = soup.find('a', {'title': 'Metempsikosis'})
+# # Get HTML content of the target page after logging in
+# target_url = "http://localhost/UAS%20WEB/menu.php"
+# driver.get(target_url)
+# html_content = driver.page_source
 
-message = "Halo, ini informasi yang saya dapatkan: " + data.text
+# # Use Beautiful Soup to extract information from HTML
+# soup = BeautifulSoup(html_content, "html.parser")
+# data = soup.find("h3", {"class": "h2"})
+# message = "Halo, ini informasi yang saya dapatkan: " + data.text
 
-print(message)
+# # Print or send the message to another service
+# print(message)
+
+# # Close the Selenium webdriver
+driver.quit()

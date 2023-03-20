@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from bs4 import BeautifulSoup
 # Setup Selenium webdriver
 service = Service('C:/windows/system32/chromedriver.exe') # Sesuaikan dengan path ke driver Chrome di komputer Anda
 driver = webdriver.Chrome(service=service)
@@ -23,17 +23,17 @@ login_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btn")))
 login_button.click()
 
 # # Get HTML content of the target page after logging in
-# target_url = "http://localhost/UAS%20WEB/menu.php"
-# driver.get(target_url)
-# html_content = driver.page_source
+target_url = "http://localhost/UAS%20WEB/menu.php"
+driver.get(target_url)
+html_content = driver.page_source
 
 # # Use Beautiful Soup to extract information from HTML
-# soup = BeautifulSoup(html_content, "html.parser")
-# data = soup.find("h3", {"class": "h2"})
-# message = "Halo, ini informasi yang saya dapatkan: " + data.text
+soup = BeautifulSoup(html_content, "html.parser")
+data = soup.find("h3", {"class": "h2"})
+message = "Halo, ini informasi yang saya dapatkan: " + data.text
 
 # # Print or send the message to another service
-# print(message)
+print(message)
 
 # # Close the Selenium webdriver
 driver.quit()
